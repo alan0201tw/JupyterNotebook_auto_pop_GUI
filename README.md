@@ -1,6 +1,7 @@
 #JupyterNotebook_auto_pop_GUI
 
 This is a config file for Jupyter Notebook.
+
 Please put this file under : "C:\Users\(user_name)\.jupyter" , and please don't change the file name.
 
 How it works / How to use :
