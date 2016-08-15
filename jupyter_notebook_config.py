@@ -542,6 +542,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4.QtWebKit import *
 import json
+import codecs
 
 def is_json(myjson):
     valid , err = True , None
@@ -638,20 +639,19 @@ def post_save(model, os_path, contents_manager):
 
     global glo_os_path
     glo_os_path = fname
-    app = QApplication(sys.argv)
 
+    app = QApplication(sys.argv)
     obj = Git_Commit()
     obj.show()
 
     edited_file = open(fname , 'r')
     file_content = edited_file.read()
+    file_json = json.dumps(json.loads(file_content), indent=4, sort_keys=True)
 
     if is_json(file_content)[0] :
-        obj.json_info.setText("File name : " + fname + "\nJson is Valid , structure as below\n" + file_content)
+        obj.json_info.setText("File name : " + fname + "\nJson is Valid , structure as below\n" + file_json)
     else :
         obj.json_info.setText("File name : " + fname + "\nJson is not valid\n" + "Error Message : " + is_json(file_content)[1].message)
-
-    #check_call(['python' , 'Check_json_valid.py', fname], cwd=d)
 
     app.exec_()
 
