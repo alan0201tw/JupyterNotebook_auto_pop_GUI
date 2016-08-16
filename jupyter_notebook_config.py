@@ -571,7 +571,7 @@ class Git_Commit (QWidget):
 
         column1_1 = QHBoxLayout()
         self.json_info = QLabel('')
-        self.json_info.setFont(QFont('Courier'))
+        #self.json_info.setFont(QFont('Courier'))
         column1_1.addWidget(self.json_info)
 
         column2 = QHBoxLayout()
@@ -593,23 +593,22 @@ class Git_Commit (QWidget):
     def commit(self):
         repo = Repo('.')
         global glo_os_path
-        print repo.git.add(glo_os_path)   #option as argument as filename
+        print repo.git.add(glo_os_path)
         print repo.git.status()
         print repo.git.branch()
-        #print repo.git.checkout('test_branch')
-        #print repo.git.branch()
+        msg = QMessageBox()
+        print repo.git.checkout('test_branch')
         try:
-            print repo.git.commit(m=self.commit_message.text())
-        except:
-            print "Error!!!"
-            msg = QMessageBox()
+            response = repo.git.commit(m=self.commit_message.text())
+            msg.setIcon(QMessageBox.Information)
+        except Exception , ex:
+            print str(ex)
+            response = str(ex)
             msg.setIcon(QMessageBox.Critical)
-            msg.setText("An Error occurs when committing " + glo_os_path)
-            #msg.setInformativeText("This is additional information")
-            msg.setWindowTitle("Error!")
+        finally:
+            msg.setText(response)
+            msg.setWindowTitle("Commit Response")
             msg.setStandardButtons(QMessageBox.Ok)
-            #msg.resize(350,200)
-            #msg.setDetailedText("The details are as follows:")
             msg.exec_()
 
         self.close()
@@ -646,9 +645,9 @@ def post_save(model, os_path, contents_manager):
 
     edited_file = open(fname , 'r')
     file_content = edited_file.read()
-    file_json = json.dumps(json.loads(file_content), indent=4, sort_keys=True)
 
     if is_json(file_content)[0] :
+        file_json = json.dumps(json.loads(file_content), indent=4, sort_keys=True)
         obj.json_info.setText("File name : " + fname + "\nJson is Valid , structure as below\n" + file_json)
     else :
         obj.json_info.setText("File name : " + fname + "\nJson is not valid\n" + "Error Message : " + is_json(file_content)[1].message)
