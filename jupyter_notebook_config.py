@@ -630,8 +630,19 @@ _script_exporter = None
 def post_save(model, os_path, contents_manager):
     """post-save hook for converting notebooks to .py scripts"""
     d, fname = os.path.split(os_path)
+    app = QApplication(sys.argv)
 
-    tmp_repo = Repo('.')
+    try:
+        tmp_repo = Repo('.')
+    except Exception , ex :
+        t = QMessageBox()
+        t.setIcon(QMessageBox.Information)
+        t.setText(str(ex) + "\nIt's very likely that this folder is not connected to any repo.Please check before further usage.")
+        t.setWindowTitle('Error occurs when connecting git')
+        t.exec_()
+    finally:
+        return
+
     if "nothing to commit" in tmp_repo.git.status(fname) :
         #print tmp_repo.git.status(fname)
         return
@@ -639,7 +650,6 @@ def post_save(model, os_path, contents_manager):
     global glo_os_path
     glo_os_path = fname
 
-    app = QApplication(sys.argv)
     obj = Git_Commit()
     obj.show()
 
