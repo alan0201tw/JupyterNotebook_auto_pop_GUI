@@ -591,14 +591,14 @@ class Git_Commit (QWidget):
         self.setLayout(lay)
 
     def commit(self):
-        repo = Repo('.')
-        global glo_os_path
-        print repo.git.add(glo_os_path)
-        print repo.git.status()
-        print repo.git.branch()
-        msg = QMessageBox()
-        print repo.git.checkout('test_branch')
         try:
+            repo = Repo('.')
+            msg = QMessageBox()
+            global glo_os_path
+            print repo.git.add(glo_os_path)
+            print repo.git.status()
+            print repo.git.branch()
+            #print repo.git.checkout('test_branch')
             response = repo.git.commit(m=self.commit_message.text())
             msg.setIcon(QMessageBox.Information)
         except Exception , ex:
