@@ -640,7 +640,6 @@ def post_save(model, os_path, contents_manager):
         t.setText(str(ex) + "\nIt's very likely that this folder is not connected to any repo.Please check before further usage.")
         t.setWindowTitle('Error occurs when connecting git')
         t.exec_()
-    finally:
         return
 
     if "nothing to commit" in tmp_repo.git.status(fname) :
